@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class BaseballSegmentTree {
     private int[] scores;
     private int[] tree;
-    private  int n;
+    private int n;
 
     // 경기 데이터 입력 받은 후 배열 저장 및 세그먼트 트리 생성
     public BaseballSegmentTree(int[] scores) {
@@ -17,7 +17,7 @@ public class BaseballSegmentTree {
     }
 
     // 세그먼트 트리 생성
-    private  int build(int node, int start, int end) {
+    private int build(int node, int start, int end) {
         if (start == end) {
             return tree[node] = scores[start - 1];
         }
@@ -28,7 +28,7 @@ public class BaseballSegmentTree {
     }
 
     // 구간 득점 조회
-    public  int Qurey(int qStart, int qEnd) {
+    public int Qurey(int qStart, int qEnd) {
         return Qurey(1, 1, n, qStart, qEnd);
     }
 
@@ -54,7 +54,7 @@ public class BaseballSegmentTree {
     }
 
     private void Update(int node, int start, int end, int inning, int newScore) {
-        if (inning < start || inning > end){
+        if (inning < start || inning > end) {
             return;
         }
         if (start == end) {
@@ -65,21 +65,20 @@ public class BaseballSegmentTree {
         int mid = (start + end) / 2;
         if (inning <= mid) {
             Update(node * 2, start, mid, inning, newScore);
-        }
-        else {
+        } else {
             Update(node * 2 + 1, mid + 1, end, inning, newScore);
         }
         tree[node] = tree[node * 2] + tree[node * 2 + 1];
     }
 
-    public int[] getScores(){
+    public int[] getScores() {
         return scores.clone();
     }
 
     // 시뮬레이션
     public static void main(String[] args) {
         // 경기 데이터 입력
-        int[] kiaScores = {2, 0, 3, 6, 10, 0, 0, 2, 0};
+        int[] kiaScores = { 2, 0, 3, 6, 10, 0, 0, 2, 0 };
         System.out.println("=== 경기 데이터 입력 및 세그먼트 트리 생성 ===");
         BaseballSegmentTree bgSystem = new BaseballSegmentTree(kiaScores);
         System.out.println("초기 이닝별 득점: " + Arrays.toString(bgSystem.getScores()));
