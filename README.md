@@ -12,51 +12,42 @@
 ### 주요 알고리즘
 - 득점 조회
 ```
-public  int Qurey(int qStart, int qEnd) {
-        return Qurey(1, 1, n, qStart, qEnd);
+private int queryRecursive(int node, int start, int end, int qStart, int qEnd) {
+    // 1. 겹치지 않을 경우
+    if (qEnd < start || end < qStart) {
+        return 0;
     }
-
-    private int Qurey(int node, int start, int end, int qStart, int qEnd) {
-        // 겹치지 않을 경우
-        if (qEnd < start || end < qStart) {
-            return 0;
-        }
-        // 완전히 겹치는 경우
-        if (qStart <= start && end <= qEnd) {
-            return tree[node];
-        }
-        // 일부만 겹치는 경우
-        int mid = (start + end) / 2;
-        int leftVal = Qurey(node * 2, start, mid, qStart, qEnd);
-        int rightVal = Qurey(node * 2 + 1, mid + 1, end, qStart, qEnd);
-        return leftVal + rightVal;
+    // 2. 완전히 겹치는 경우
+    if (qStart <= start && end <= qEnd) {
+        return tree[node];
     }
+    // 일부만 겹치는 경우
+    int mid = (start + end) / 2;
+    int leftVal = queryRecursive(node * 2, start, mid, qStart, qEnd);
+    int rightVal = queryRecursive(node * 2 + 1, mid + 1, end, qStart, qEnd);
+    return leftVal + rightVal;
+}
 ```
 
 - 득점 갱신
 ```
-    public void Update(int inning, int newScore) {
-        Update(1, 1, n, inning, newScore);
+private void updateRecursive(int node, int start, int end, int inning, int newScore) {
+    if (inning < start || inning > end) {
+        return;
     }
-
-    private void Update(int node, int start, int end, int inning, int newScore) {
-        if (inning < start || inning > end){
-            return;
-        }
-        if (start == end) {
-            scores[inning - 1] = newScore;
-            tree[node] = newScore;
-            return;
-        }
-        int mid = (start + end) / 2;
-        if (inning <= mid) {
-            Update(node * 2, start, mid, inning, newScore);
-        }
-        else {
-            Update(node * 2 + 1, mid + 1, end, inning, newScore);
-        }
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
+    if (start == end) {
+        scores[inning - 1] = newScore;
+        tree[node] = newScore;
+        return;
     }
+    int mid = (start + end) / 2;
+    if (inning <= mid) {
+        updateRecursive(node * 2, start, mid, inning, newScore);
+    } else {
+        updateRecursive(node * 2 + 1, mid + 1, end, inning, newScore);
+    }
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
+}
 ```
 ---
 - **과목명**: 소프트웨어프로젝트
